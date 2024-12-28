@@ -1,12 +1,15 @@
-import { Provider } from "@/components/ui/provider";
 import React from "react";
-import ReactDOM from "react-dom/client";
+import ReactDOM from "react-dom";
+import { Provider } from "./components/ui/provider";
+import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-      <Provider>
+    <Provider>
+      <BrowserRouter>
         <App />
-      </Provider>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );
