@@ -10,8 +10,8 @@ function Homepage() {
   }, [fetchProducts]);
   console.log(products);
   return (
-    <Container maxW={"xl"} py={12}>
-      <VStack spacing={8}>
+    <Container maxW={"6xl"} py={10}>
+      <VStack>
         <Text
           fontSize={"3xl"}
           fontWeight={"bold"}
@@ -21,6 +21,7 @@ function Homepage() {
           bgClip={"text"}
           textAlign={"center"}
           _light={{ gradientFrom: "teal.500" }}
+          pb={10}
         >
           Current Products 🚀
         </Text>
@@ -31,13 +32,14 @@ function Homepage() {
             md: 2,
             lg: 3,
           }}
-          spacing={10}
           w={"full"}
+          gap={10}
         >
           {products.map((product) => (
-            <ProductCard key={product._id} product={product} />
+            <ProductCard key={product._id} product={product}/>
           ))}
         </SimpleGrid>
+
         {products.length === 0 && (
           <Text
             fontSize={"xl"}

@@ -36,7 +36,7 @@ const Navbar = () => {
         </Flex>
 
         {/* Buttons */}
-        <HStack spacing={2} align="center">
+        <HStack gap={2} align="center">
           <IconButton
             onClick={() => navigate("/create")}
             aria-label="Create new product"
