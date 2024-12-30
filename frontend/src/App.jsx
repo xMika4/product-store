@@ -5,7 +5,7 @@ import HomePage from "./pages/Homepage";
 import Navbar from "./components/Navbar";
 function App() {
   return (
-    <Box minH={"100vh"} background={"#24252c"}>
+    <Box minH={"100vh"}>
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
