@@ -5,9 +5,8 @@ import { ColorModeButton } from "./ui/color-mode";
 
 const Navbar = () => {
   const navigate = useNavigate();
-
   return (
-    <Box _dark={{ bg: "gray.900" }} _light={{ bg: "gray.100" }}>
+    <Box>
       <Flex
         h={16}
         align="center"
