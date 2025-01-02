@@ -21,7 +21,7 @@ function Homepage() {
           bgClip={"text"}
           textAlign={"center"}
           _light={{ gradientFrom: "teal.500" }}
-          pb={10}
+          pb={16}
         >
           Current Products 🚀
         </Text>

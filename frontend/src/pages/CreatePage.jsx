@@ -1,12 +1,5 @@
 import { useProductStore } from "@/store/product";
-import {
-  Container,
-  Heading,
-  VStack,
-  Box,
-  Input,
-  Button,
-} from "@chakra-ui/react";
+import { Container, Text, VStack, Box, Input, Button } from "@chakra-ui/react";
 import { toaster } from "@/components/ui/toaster";
 import { useState } from "react";
 
@@ -25,6 +18,12 @@ const CreatePage = () => {
         duration: 5000,
         type: "error",
       });
+    } else if (isNaN(Number(newProduct.price))) {
+        toaster.create({
+          title: "Please enter a valid numeric price",
+          duration: 5000,
+          type: "error",
+        });
     } else {
       setNewProduct({ name: "", price: "", image: "" });
       toaster.create({
@@ -35,15 +34,26 @@ const CreatePage = () => {
     }
   };
   return (
-    <Container maxW={"lg"}>
+    <Container maxW={"xl"}>
       <VStack gap={8}>
-        <Heading as={"h1"} size={"3xl"} textAlign={"center"} mb={8} mt={4}>
+        <Text
+          fontSize={"3xl"}
+          fontWeight={"bold"}
+          bgGradient={"to-r"}
+          gradientFrom={"teal.300"}
+          gradientTo={"blue.500"}
+          bgClip={"text"}
+          textAlign={"center"}
+          _light={{ gradientFrom: "teal.500" }}
+          pt={10}
+          pb={10}
+        >
           Create New Product
-        </Heading>
+        </Text>
         <Box
           w={"full"}
-          _dark={{ bg: "gray.800" }}
-          _light={{ bg: "white" }}
+          _dark={{ bg: "#1e212f" }}
+          _light={{ bg: "#f8f8f8" }}
           p={6}
           rounded={"lg"}
           shadow={"md"}
@@ -73,7 +83,13 @@ const CreatePage = () => {
                 setNewProduct({ ...newProduct, image: e.target.value })
               }
             />
-            <Button colorScheme={"blue"} onClick={handleAddProduct} w={"full"}>
+            <Button
+              colorScheme={"blue"}
+              onClick={handleAddProduct}
+              w={"full"}
+              _dark={{ bg: "blue.200" }}
+              _light={{ bg: "blue.400" }}
+            >
               Add Product
             </Button>
           </VStack>

@@ -12,7 +12,7 @@ export const getProducts = async (req, res) => {
 };
 
 export const createProduct = async (req, res) => {
-  const product = req.body; //user will send this data
+  const product = req.body;
   if (!product.name || !product.price || !product.image) {
     return res
       .status(400)
@@ -40,7 +40,7 @@ export const updateProduct = async (req, res) => {
     const updatedProduct = await Product.findByIdAndUpdate(id, product, {
       new: true,
     });
-    res.status(200).json({ success: true, data: updatedProduct });
+    res.status(200).json({ success: true, data: updatedProduct, message: "Product updated" });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server error" });
   }
@@ -58,6 +58,6 @@ export const deleteProduct = async (req, res) => {
     res.status(200).json({ success: true, message: "Product deleted" });
   } catch (error) {
     console.log(`Error in deleting product: ${error.message}`);
-    res.status(500).json({ success: false, message: "Server error" });
+    res.status(500).json({ success: false, message: "Server error." });
   }
 };

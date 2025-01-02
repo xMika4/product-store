@@ -28,7 +28,6 @@ export const useProductStore = create((set) => ({
     });
     const data = await res.json();
     if (!data.success) return { success: false, message: data.message };
-    //update ui immediately
     set((state) => ({
       products: state.products.filter((product) => product._id !== pid),
     }));
@@ -45,8 +44,7 @@ export const useProductStore = create((set) => ({
 		const data = await res.json();
 		if (!data.success) return { success: false, message: data.message };
 
-		// update the ui immediately, without needing a refresh
-		set((state) => ({
+    set((state) => ({
 			products: state.products.map((product) => (product._id === pid ? data.data : product)),
 		}));
 

@@ -1,64 +1,62 @@
-import { useProductStore } from "@/store/product";
 import {
   Box,
-  Button,
-  DialogActionTrigger,
-  DialogBody,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogRoot,
-  Heading,
-  HStack,
-  IconButton,
   Image,
-  Input,
+  Heading,
   Text,
+  HStack,
+  Input,
   VStack,
+  IconButton,
+  Button,
 } from "@chakra-ui/react";
-
+import {
+  DialogRoot,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogBody,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { useState } from "react";
+import { toaster } from "@/components/ui/toaster";
+import { useProductStore } from "@/store/product";
 import { BsFillTrashFill } from "react-icons/bs";
 import { MdEdit } from "react-icons/md";
-import { toaster } from "@/components/ui/toaster";
-import { useState } from "react";
 
 function ProductCard({ product }) {
   const [updatedProduct, setUpdatedProduct] = useState(product);
   const { deleteProduct, updateProduct } = useProductStore();
-  const [open, setOpen] = useState(false);
   const handleDeleteProduct = async (pid) => {
     const { success, message } = await deleteProduct(pid);
-    if (!success) {
-      toaster.create({
-        title: message,
-        duration: 3000,
-        type: "error",
-      });
-    } else {
-      toaster.create({
-        title: message,
-        duration: 3000,
-        type: "success",
-      });
-    }
+    toaster.create({
+      title: message,
+      duration: 3000,
+      type: success ? "success" : "error",
+    });
   };
   const handleUpdateProduct = async (pid, updatedProduct) => {
-    const { success, message } = await updateProduct(pid, updatedProduct);
-    setOpen(false);
-    if (!success) {
+    // Check if string is numeric
+    if (isNaN(Number(updatedProduct.price))) {
       toaster.create({
-        title: message,
+        title: "Please enter a valid numeric price",
         duration: 3000,
         type: "error",
       });
-    } else {
-      toaster.create({
-        title: message,
-        duration: 3000,
-        type: "success",
-      });
+      return; // Stop here
     }
+  
+    // If we haven't returned, the price is numeric
+    const { success, message } = await updateProduct(pid, updatedProduct);
+  
+    toaster.create({
+      title: message,
+      duration: 3000,
+      type: success ? "success" : "error",
+    });
   };
+  
+
   return (
     <Box
       shadow="lg"
@@ -66,8 +64,8 @@ function ProductCard({ product }) {
       overflow="hidden"
       transition="all 0.3s"
       _hover={{ transform: "translateY(-5px)", shadow: "xl" }}
-      _dark={{ bg: "gray.800" }}
-      _light={{ bg: "white" }}
+      _dark={{ bg: "#1e212f" }}
+      _light={{ bg: "#f8f8f8" }}
       m={0}
     >
       <Image
@@ -91,14 +89,77 @@ function ProductCard({ product }) {
           ${product.price}
         </Text>
         <HStack justifyContent={"space-between"}>
-          <IconButton
-            aria-label="Edit product"
-            _dark={{ bg: "blue.200" }}
-            _light={{ bg: "blue.400" }}
-            onClick={() => setOpen(true)} // Set open to true when clicked
-          >
-            <MdEdit />
-          </IconButton>
+          <DialogRoot>
+            <DialogTrigger>
+              <IconButton
+                aria-label="Edit product"
+                _dark={{ bg: "blue.200" }}
+                _light={{ bg: "blue.400" }}
+              >
+                <MdEdit />
+              </IconButton>
+            </DialogTrigger>
+            <DialogContent _dark={{ bg: "#1e212f" }} _light={{ bg: "#f8f8f8" }}>
+              <DialogHeader>
+                <DialogTitle>Update Product</DialogTitle>
+              </DialogHeader>
+              <DialogBody>
+                <VStack spacing={4}>
+                  <Input
+                    placeholder="Product Name"
+                    name="name"
+                    value={updatedProduct.name}
+                    outline="none"
+                    onChange={(e) =>
+                      setUpdatedProduct({
+                        ...updatedProduct,
+                        name: e.target.value,
+                      })
+                    }
+                  />
+                  <Input
+                    type="number"
+                    placeholder="Price"
+                    name="price"
+                    value={updatedProduct.price}
+                    outline={"none"}
+                    onChange={(e) =>
+                      setUpdatedProduct((prev) => ({
+                        ...prev,
+                        price: e.target.value,
+                      }))
+                    }
+                  />
+
+                  <Input
+                    placeholder="Image URL"
+                    name="image"
+                    value={updatedProduct.image}
+                    outline="none"
+                    onChange={(e) =>
+                      setUpdatedProduct({
+                        ...updatedProduct,
+                        image: e.target.value,
+                      })
+                    }
+                  />
+                </VStack>
+              </DialogBody>
+              <DialogFooter>
+                <Button
+                  colorScheme="blue"
+                  mr={3}
+                  onClick={() =>
+                    handleUpdateProduct(product._id, updatedProduct)
+                  }
+                  _dark={{ bg: "blue.200" }}
+                  _light={{ bg: "blue.400" }}
+                >
+                  Update
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </DialogRoot>
 
           <IconButton
             aria-label="Delete product"
@@ -109,67 +170,6 @@ function ProductCard({ product }) {
             <BsFillTrashFill />
           </IconButton>
         </HStack>
-      </Box>
-      <Box>
-        <DialogRoot
-          lazyMount
-          open={open}
-          onOpenChange={(isOpen) => setOpen(isOpen)}
-        >
-          <DialogContent>
-            <DialogHeader>Update Product</DialogHeader>
-            <DialogBody>
-              <VStack spacing={4}>
-                <Input
-                  placeholder="Product Name"
-                  name="name"
-                  value={updatedProduct.name}
-                  onChange={(e) =>
-                    setUpdatedProduct({
-                      ...updatedProduct,
-                      name: e.target.value,
-                    })
-                  }
-                />
-                <Input
-                  placeholder="Price"
-                  name="price"
-                  type="number"
-                  value={updatedProduct.price}
-                  onChange={(e) =>
-                    setUpdatedProduct({
-                      ...updatedProduct,
-                      price: e.target.value,
-                    })
-                  }
-                />
-                <Input
-                  placeholder="Image URL"
-                  name="image"
-                  value={updatedProduct.image}
-                  onChange={(e) =>
-                    setUpdatedProduct({
-                      ...updatedProduct,
-                      image: e.target.value,
-                    })
-                  }
-                />
-              </VStack>
-            </DialogBody>
-            <DialogFooter>
-              <DialogActionTrigger asChild>
-                <Button variant="outline" onClick={() => setOpen(false)}>
-                  Cancel
-                </Button>
-              </DialogActionTrigger>
-              <Button
-                onClick={() => handleUpdateProduct(product._id, updatedProduct)}
-              >
-                Save
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </DialogRoot>
       </Box>
     </Box>
   );
